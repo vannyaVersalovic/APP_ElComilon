@@ -1,0 +1,41 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Register</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Register</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div class="content-container">
+    <div class="input-container">
+      <ion-item>
+        <ion-avatar slot="start">
+          <img src="https://w7.pngwing.com/pngs/81/570/png-transparent-profile-logo-computer-icons-user-user-blue-heroes-logo-thumbnail.png" />
+        </ion-avatar>
+        <ion-input placeholder="Nombre" type="nombre" [(ngModel)]="nombre"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input placeholder="Apellido" type="apellido" [(ngModel)]="apellido"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input placeholder="Email" type="email" type="email" [(ngModel)]="email"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input placeholder="Contraseña" type="password" [(ngModel)]="password"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input placeholder="Usuario" type="text"  [(ngModel)]="user"></ion-input> 
+          </ion-item>
+        </div>
+  </div>
+  <div class="button-container">
+      <ion-button expand="block" (click)="onRegisterButtonPressed()">Register</ion-button>
+    </div>
+
+
+</ion-content>

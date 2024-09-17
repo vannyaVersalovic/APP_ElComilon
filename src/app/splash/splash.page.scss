@@ -1,0 +1,18 @@
+.splash-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    background-color: #f4f2d3; /* Fondo verde oscuro */
+    color: #f5f5dc; /* Color beige para el texto dentro del contenedor */
+  
+  
+  }
+  
+  .logo {
+    width: 150px; /* Ajusta el tamaño del logo */
+    height: auto;
+    margin-bottom: 20px; /* Espacio entre el logo y el indicador de carga */
+  }
+  

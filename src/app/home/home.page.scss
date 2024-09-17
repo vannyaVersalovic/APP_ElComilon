@@ -1,0 +1,42 @@
+ion-button {
+  --background: #2196F3;  /* Color de fondo azul */
+  --color: #FFFFFF;       /* Color del texto del botón */
+  --border-radius: 4px;   /* Bordes redondeados (opcional) */
+  --box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);  /* Sombra (opcional) */
+}
+
+ion-button:hover {
+  --background: #1976D2;  /* Color de fondo cuando se pasa el cursor (opcional) */
+}
+
+.food-container {
+  background-color:#f5f5dc;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.food-item {
+  text-align: center;
+  margin: 10px;
+}
+
+.food-img {
+  width: 100px; /* Ajusta el tamaño de la imagen */
+  height: 100px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+h3 {
+  margin: 5px 0 2px 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+p {
+  font-size: 1rem;
+  color: #888;
+}
+
