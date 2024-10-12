@@ -1,0 +1,3 @@
+Implementar:
+
+- Api, persistencia de datos, firebase.
