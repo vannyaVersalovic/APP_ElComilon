@@ -1,45 +1,68 @@
-/* Estilos generales para el contenido principal */
+/* ion-content: Fondo beige, centra el contenido horizontal y verticalmente */
 ion-content {
+    --background: #f4f2d3;
     display: flex;
-    justify-content: center; /* Centra verticalmente si es necesario */
-    align-items: center; /* Centra horizontalmente */
+    justify-content: center;
+    align-items: center;
+    height: 100%;
 }
 
-/* Estilos del contenedor principal que engloba todo el contenido */
+/* .content-container: Contenedor principal, centra el contenido, fondo beige claro */
 .content-container {
     display: flex;
     flex-direction: column;
-    justify-content: flex-end; /* Asegura que los botones estén en la parte inferior */
+    justify-content: center;
+    align-items: center;
     width: 100%;
-    padding: 32px; /* Espacio alrededor del contenido */
-    gap: 16px; /* Espacio entre input-container y button-container */
-    height: 100%; /* Asegura que el contenedor ocupe todo el espacio disponible */
-    background-color: #f4f2d3; /* Fondo verde oscuro */
-    color: #f5f5dc; /* Color beige para el texto dentro del contenedor */
+    padding: 32px;
+    gap: 16px;
+    height: 100vh;
+    background-color: #f5f5dc;
+    color: #000000;
 }
 
-/* Estilos para el contenedor de los botones */
+/* .login-title: Estilos del título */
+.login-title {
+    color: #000000;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* .button-container: Contenedor de los botones, centra los botones horizontalmente */
 .button-container {
-    margin-top: -20px; /* Mueve el botón hacia arriba */
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    max-width: 400px;
 }
 
-/* Estilos para los botones */
+/* ion-button: Estilos para los botones */
 ion-button {
-    --background: #8640e7; /* Color del fondo del botón */
-    --color: #ffffff;      /* Color del texto del botón */
+    --background: #8640e7;
+    /* Color de fondo morado, mucho más bonito jejeje */
+    --color: #ffffff;
+    width: 100%;
 }
 
-/* Estilos para el contenedor de los inputs (Nombre, Apellido, etc.) */
+/* .input-container: Contenedor de los inputs, espacio entre los inputs */
+.input-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 400px;
+}
 
-/* Estilos para los elementos ion-item que envuelven los inputs */
+/* ion-item::part(native): Fondo transparente, color del texto */
 ion-item::part(native) {
-    background-color: transparent; /* Asegura que el fondo de los items no sobreescriba */
-    color: #000000; /* Color beige para el texto dentro de los inputs */
+    background-color: transparent;
+    color: #000000;
 }
 
-/* Estilos para los inputs (texto y placeholders) */
+/* ion-input: Color del placeholder y del texto en los inputs */
 ion-input {
-    --placeholder-color: #5270a3; /* Color beige para los placeholders */
-    /* Color beige para el texto dentro de los inputs */
+    --placeholder-color: #5270a3;
+    color: #000000;
+    margin-bottom: 15px;
 }
-
