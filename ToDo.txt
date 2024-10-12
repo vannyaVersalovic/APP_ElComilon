@@ -1,3 +1,8 @@
 Implementar:
 
 - Api, persistencia de datos, firebase.
+
+
+--- Implementación de persistencia de datos
+localStorage para persistencia de datos dentro de SessionManager.ts,
+login / register.
