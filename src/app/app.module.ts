@@ -4,7 +4,7 @@ import { RouteReuseStrategy } from '@angular/router';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
 import { AngularFireModule } from '@angular/fire/compat';
-import { AngularFireAnalyticsModule } from '@angular/fire/compat/analytics';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore'; // Import FirestoreModule
 import { environment } from '../environments/environment';
 
 import { AppComponent } from './app.component';
@@ -16,9 +16,8 @@ import { AppRoutingModule } from './app-routing.module';
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
-    // Se importa e inicializa Firebase con la configuración del entorno
-    AngularFireModule.initializeApp(environment.firebaseConfig),
-    AngularFireAnalyticsModule
+    AngularFireModule.initializeApp(environment.firebaseConfig), // Firebase initialized
+    AngularFirestoreModule, // FirestoreModule imported
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],

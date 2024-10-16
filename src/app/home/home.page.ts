@@ -1,17 +1,33 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ProductService } from '../services/product.service';
 import { Router } from '@angular/router';
-import { SessionManager } from 'src/app/managers/SessionManager';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
 })
-export class HomePage {
-  constructor(private sessionManager: SessionManager, private router: Router) {}
+export class HomePage implements OnInit {
+  products: any[] = [];
+
+  constructor(private productService: ProductService, private router: Router) {}
+
+  ngOnInit() {
+    this.loadProducts();
+  }
+
+  loadProducts() {
+    this.productService.getProducts().subscribe((data: any[]) => {
+      this.products = data.map((e: any) => {
+        return {
+          id: e.payload.doc.id,
+          ...e.payload.doc.data(),
+        };
+      });
+    });
+  }
 
   navigateToLogin() {
-    this.sessionManager.performLogout();
-    this.router.navigate(['/login']); // Redirigir a la página de login
+    this.router.navigate(['/login']);
   }
 }
