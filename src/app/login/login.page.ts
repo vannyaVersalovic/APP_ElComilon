@@ -11,16 +11,21 @@ export class LoginPage {
   email: string = '';
   password: string = '';
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   login() {
     this.authService
       .login(this.email, this.password)
       .then(() => {
         alert('Inicio de sesión exitoso');
+        this.router.navigate(['/home']); // Esto redirige correctamente a home
       })
       .catch((err) => {
         alert('Error en el inicio de sesión: ' + err.message);
       });
+  }
+
+  onRegisterButtonPressed() {
+    this.router.navigate(['/register']);
   }
 }

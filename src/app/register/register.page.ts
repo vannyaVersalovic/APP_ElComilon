@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { SessionManager } from '../managers/SessionManager';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -8,31 +8,27 @@ import { SessionManager } from '../managers/SessionManager';
   styleUrls: ['./register.page.scss'],
 })
 export class RegisterPage implements OnInit {
+  nombre: string = '';
+  apellido: string = '';
+  email: string = '';
+  password: string = '';
+  user: string = '';
 
-  nombre: string= '';
-  apellido: string= '';
-  email: string='';
-  password: string='';
-  user: string='';
+  constructor(private authService: AuthService, private router: Router) {}
 
-  constructor(private router: Router, private sessionManager: SessionManager) { }
-
-  // Asegúrate de que el método ngOnInit esté presente
-  ngOnInit() { 
-    // Lógica opcional que quieras inicializar al cargar la página
-  }
+  ngOnInit() {}
 
   onRegisterButtonPressed() {
     if (this.nombre && this.apellido && this.email && this.user && this.password) {
-      // Intentamos registrar al usuario
-      const isRegistered = this.sessionManager.registerUser(this.user, this.password, this.email);
-      if (isRegistered) {
-        alert('Registro exitoso. Ahora puedes iniciar sesión.');
-        // Redirigimos al login después de un registro exitoso
-        this.router.navigate(['/login']);
-      } else {
-        alert('El usuario ya existe.');
-      }
+      this.authService
+        .register(this.email, this.password)
+        .then(() => {
+          alert('Registro exitoso. Ahora puedes iniciar sesión.');
+          this.router.navigate(['/login']);
+        })
+        .catch((err) => {
+          alert('Error en el registro: ' + err.message);
+        });
     } else {
       alert('Por favor, completa todos los campos.');
     }

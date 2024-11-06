@@ -12,23 +12,18 @@
   </ion-header>
 
   <div class="content-container"> <!-- Contenedor de los elementos del login -->
-        <div class="input-container">
-      <ion-item>
+    <div class="input-container">
+      <ion-item> 
         <ion-input placeholder="Correo electrónico" type="email" [(ngModel)]="email"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-input placeholder="Usuario" type="text" [(ngModel)]="user"></ion-input>
       </ion-item>
       <ion-item>
         <ion-input placeholder="Contraseña" type="password" [(ngModel)]="password"></ion-input>
       </ion-item>
     </div>
-  
 
     <div class="button-container"> <!-- Contenedor de los botones -->
-      <ion-button expand="block" (click)="onLoginButtonPressed()">Login</ion-button>
+      <ion-button expand="block" (click)="login()">Login</ion-button>
       <ion-button expand="block" color="secondary" (click)="onRegisterButtonPressed()">Register</ion-button>
     </div>
-
   </div>
 </ion-content>

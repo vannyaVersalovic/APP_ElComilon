@@ -6,3 +6,13 @@ Implementar:
 --- Implementación de persistencia de datos
 localStorage para persistencia de datos dentro de SessionManager.ts,
 login / register.
+
+Actual:
+
+Ionic storage 🟢
+Autenticación firebise auth 🟢
+Crud
+Api rest 🟢
+Buscar node express
+Firebase como consumo de API 🟢
+Usar instancia de realtime database

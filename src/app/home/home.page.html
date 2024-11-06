@@ -1,6 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Menú de Comidas</ion-title>
+    <ion-title>Menú</ion-title>
     <ion-buttons slot="start">
       <ion-button (click)="navigateToLogin()">
         Volver al Login
@@ -9,45 +9,83 @@
   </ion-toolbar>
 </ion-header>
 <ion-content fullscreen>
-   pager="true" loop="true">
-    
-      <div class="food-container">
-        <div class="food-item">
-          <img src="assets/imagenes/papas_fritas.png" alt="Papas Fritas" class="food-img">
-          <h3>Papas Fritas</h3>
-          <p>$2500</p>
-        </div>
-        <div class="food-item">
-          <img src="assets/imagenes/hamburguesa_happy.png" alt="Hamburguesa Happy" class="food-img">
-          <h3>Hamburguesa Happy</h3>
-          <p>$5600</p>
-        </div>
-        <div class="food-item">
-          <img src="assets/imagenes/nugget.png" alt="Nugget" class="food-img">
-          <h3>Nugget</h3>
-          <p>$3200</p>
-        </div>
-      </div>
-    
+  <!-- Barra de búsqueda -->
+  <ion-searchbar
+    [(ngModel)]="busqueda"
+    (ionInput)="buscarPedidos()"
+    placeholder="Realizar pedidos">
+  </ion-searchbar>
 
-   
-      <div class="food-container">
-        <div class="food-item">
-          <img src="assets/imagenes/pizza.png" alt="Pizza" class="food-img">
-          <h3>Pizza Familiar</h3>
-          <p>$5800</p>
-        </div>
-        <div class="food-item">
-          <img src="assets/imagenes/hotdog.png" alt="Hotdog" class="food-img">
-          <h3>Hotdog Especial</h3>
-          <p>$2900</p>
-        </div>
-        <div class="food-item">
-          <img src="assets/imagenes/ensalada.png" alt="Ensalada" class="food-img">
-          <h3>Ensalada Mixta</h3>
-          <p>$3000</p>
-        </div>
-      </div>
-    
+  <!-- Lista de pedidos -->
+  <ion-list>
+    <ion-item *ngFor="let pedido of pedidos">
+      <ion-thumbnail slot="start">
+        <img [src]="pedido.strMealThumb" alt="{{ pedido.strMeal }}">
+      </ion-thumbnail>
+      <ion-label>
+        <h2>{{ pedido.strMeal }}</h2>
+        <p>{{ pedido.strCategory }}</p>
+      </ion-label>
+      <ion-button slot="end" (click)="addProductToFirestore(pedido)">
+        Añadir al Carrito
+      </ion-button>
+    </ion-item>
+  </ion-list>
+
+  <!-- Carrito de compras -->
+  <div *ngIf="mostrarCarrito" class="carrito">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Carrito</ion-card-title>
+      </ion-card-header>
+      <ion-list>
+        <ion-item *ngFor="let item of carrito">
+          <ion-label>{{ item.strMeal }}</ion-label>
+        </ion-item>
+      </ion-list>
+      <ion-button expand="full" (click)="realizarPedido()">
+        Realizar Pedido
+      </ion-button>
+      <ion-button expand="full" color="danger" (click)="cerrarCarrito()">
+        Cerrar Carrito
+      </ion-button>
+    </ion-card>
+  </div>
+
+  <div class="food-container">
+    <div class="food-item">
+      <img src="assets/imagenes/papas_fritas.png" alt="Papas Fritas" class="food-img">
+      <h3>Papas Fritas</h3>
+      <p>$2500</p>
+    </div>
+    <div class="food-item">
+      <img src="assets/imagenes/hamburguesa_happy.png" alt="Hamburguesa Happy" class="food-img">
+      <h3>Hamburguesa Happy</h3>
+      <p>$5600</p>
+    </div>
+    <div class="food-item">
+      <img src="assets/imagenes/nugget.png" alt="Nugget" class="food-img">
+      <h3>Nugget</h3>
+      <p>$3200</p>
+    </div>
+  </div>
+
+  <div class="food-container">
+    <div class="food-item">
+      <img src="assets/imagenes/pizza.png" alt="Pizza" class="food-img">
+      <h3>Pizza Familiar</h3>
+      <p>$5800</p>
+    </div>
+    <div class="food-item">
+      <img src="assets/imagenes/hotdog.png" alt="Hotdog" class="food-img">
+      <h3>Hotdog Especial</h3>
+      <p>$2900</p>
+    </div>
+    <div class="food-item">
+      <img src="assets/imagenes/ensalada.png" alt="Ensalada" class="food-img">
+      <h3>Ensalada Mixta</h3>
+      <p>$3000</p>
+    </div>
+  </div>
 </ion-content>
 
