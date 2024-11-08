@@ -35,3 +35,37 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
+
+.content-container {
+  background-color: var(--container-background);
+  color: var(--text-primary);
+}
+
+.food-container {
+  background-color: var(--card-background);
+}
+
+ion-button {
+  --background: var(--accent-color);
+  --background-hover: var(--accent-light);
+  --background-activated: var(--accent-dark);
+  --color: var(--text-primary);
+}
+
+ion-menu {
+  --background: var(--container-background);
+  
+  ion-toolbar {
+    --background: var(--accent-color);
+  }
+}
+
+.food-item {
+  h3 {
+    color: var(--text-primary);
+  }
+  
+  p {
+    color: var(--text-secondary);
+  }
+}

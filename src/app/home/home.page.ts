@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FirebaseService } from '../services/firebase.service';
 import { ApiService } from '../services/api.service';
-import { LoadingController, ToastController } from '@ionic/angular';
+import { LoadingController, ToastController, MenuController } from '@ionic/angular';
 
 interface Pedido {
   strMeal: string;
@@ -20,20 +20,24 @@ export class HomePage implements OnInit {
   pedidos: Pedido[] = [];
   busqueda: string = '';
   carrito: any[] = [];
-  userId: string = 'usuario123';
+  userId: string = '';
   mostrarCarrito: boolean = false;
+  navbarOpen = false;
+  resultadosBusqueda: Pedido[] = [];
 
   constructor(
     private router: Router,
     private firebaseService: FirebaseService,
     private apiService: ApiService,
     private loadingCtrl: LoadingController,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private menu: MenuController // Agregar MenuController
   ) {}
 
-  ngOnInit() {
-    this.cargarPedidos();
-    this.cargarCarrito();
+  async ngOnInit() {
+    await this.cargarPedidos();
+    await this.cargarCarrito();
+    this.resultadosBusqueda = [...this.pedidos];
   }
 
   async cargarCarrito() {
@@ -50,6 +54,7 @@ export class HomePage implements OnInit {
       const response = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
       const data = await response.json();
       this.pedidos = data.meals || [];
+      this.resultadosBusqueda = [...this.pedidos]; // Actualizar también resultadosBusqueda
     } catch (error) {
       console.error('Error al cargar menú:', error);
     }
@@ -57,17 +62,66 @@ export class HomePage implements OnInit {
     loading.dismiss();
   }
 
-  buscarPedidos() {
-    if (this.busqueda.trim() === '') {
-      this.cargarPedidos();
+  async buscarPedidos() {
+    console.log('Buscando:', this.busqueda); // Para debugging
+
+    if (!this.busqueda || this.busqueda.trim() === '') {
+      this.resultadosBusqueda = [...this.pedidos];
       return;
     }
+
+    const busquedaLower = this.busqueda.toLowerCase().trim();
     
-    fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${this.busqueda}`)
-      .then(response => response.json())
-      .then(data => {
-        this.pedidos = data.meals || [];
+    // Primero buscar en los datos locales
+    this.resultadosBusqueda = this.pedidos.filter(pedido => 
+      pedido.strMeal.toLowerCase().includes(busquedaLower) ||
+      (pedido.strCategory && pedido.strCategory.toLowerCase().includes(busquedaLower))
+    );
+
+    // Si no hay resultados locales, buscar en la API
+    if (this.resultadosBusqueda.length === 0) {
+      const loading = await this.loadingCtrl.create({
+        message: 'Buscando...',
+        duration: 10000 // máximo 10 segundos
       });
+      await loading.present();
+
+      try {
+        const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${this.busqueda}`);
+        const data = await response.json();
+        this.resultadosBusqueda = data.meals || [];
+        
+        if (this.resultadosBusqueda.length === 0) {
+          this.mostrarMensajeNoResultados();
+        }
+      } catch (error) {
+        console.error('Error en la búsqueda:', error);
+        this.resultadosBusqueda = [];
+        this.mostrarError();
+      } finally {
+        loading.dismiss();
+      }
+    }
+  }
+
+  async mostrarMensajeNoResultados() {
+    const toast = await this.toastCtrl.create({
+      message: 'No se encontraron resultados',
+      duration: 2000,
+      position: 'bottom',
+      color: 'warning'
+    });
+    toast.present();
+  }
+
+  async mostrarError() {
+    const toast = await this.toastCtrl.create({
+      message: 'Error al realizar la búsqueda',
+      duration: 2000,
+      position: 'bottom',
+      color: 'danger'
+    });
+    toast.present();
   }
 
   navigateToLogin() {
@@ -139,5 +193,13 @@ export class HomePage implements OnInit {
     }
 
     loading.dismiss();
+  }
+
+  toggleNavbar() {
+    this.navbarOpen = !this.navbarOpen;
+  }
+
+  openMenu() {
+    this.menu.toggle();
   }
 }

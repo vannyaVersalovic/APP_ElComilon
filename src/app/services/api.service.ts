@@ -6,16 +6,27 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-  private apiUrl = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
+  private urlBase = 'https://www.themealdb.com/api/json/v1/1/';
 
   constructor(private http: HttpClient) {}
 
-  obtenerPedidos(): Observable<any> {
-    return this.http.get(this.apiUrl);
+  buscarComidas(): Observable<any> {
+    return this.http.get(`${this.urlBase}search.php?s=`);
   }
 
-  
-  obtenerPedidosPorNombre(nombre: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}${nombre}`);
+  buscarComidaPorNombre(nombre: string): Observable<any> {
+    return this.http.get(`${this.urlBase}search.php?s=${nombre}`);
+  }
+
+  buscarComidaPorCategoria(categoria: string): Observable<any> {
+    return this.http.get(`${this.urlBase}filter.php?c=${categoria}`);
+  }
+
+  obtenerCategorias(): Observable<any> {
+    return this.http.get(`${this.urlBase}categories.php`);
+  }
+
+  obtenerComidaAleatoria(): Observable<any> {
+    return this.http.get(`${this.urlBase}random.php`);
   }
 }

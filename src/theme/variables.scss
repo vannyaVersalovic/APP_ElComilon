@@ -1,2 +1,65 @@
 // For information on how to create your own theme, please see:
 // http://ionicframework.com/docs/theming/
+
+:root {
+  // Paleta principal
+  --ion-color-primary: #8640e7;
+  --ion-color-primary-rgb: 134, 64, 231;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-shade: #7638cb;
+  
+  // Fondo y contenedores
+  --app-background: #2b2b2b;
+  --container-background: #363636;
+  --card-background: #404040;
+  
+  // Textos
+  --text-primary: #ffffff;
+  --text-secondary: #b3b3b3;
+  --text-muted: #808080;
+  
+  // Acentos
+  --accent-color: #9b59b6;
+  --accent-light: #a66bbe;
+  --accent-dark: #8e44ad;
+
+  // Inputs y formularios
+  --input-background: #404040;
+  --input-text: #ffffff;
+  --input-placeholder: #808080;
+  
+  // Bordes y divisores
+  --border-color: #4a4a4a;
+}
+
+// Aplicar tema oscuro globalmente
+body {
+  --ion-background-color: var(--app-background);
+  --ion-text-color: var(--text-primary);
+  
+  ion-content {
+    --background: var(--app-background);
+  }
+  
+  ion-toolbar {
+    --background: var(--container-background);
+    --color: var(--text-primary);
+  }
+  
+  ion-card {
+    --background: var(--card-background);
+    --color: var(--text-primary);
+  }
+  
+  ion-item {
+    --background: var(--card-background);
+    --color: var(--text-primary);
+    --border-color: var(--border-color);
+  }
+  
+  ion-input, ion-searchbar {
+    --background: var(--input-background);
+    --color: var(--input-text);
+    --placeholder-color: var(--input-placeholder);
+  }
+}

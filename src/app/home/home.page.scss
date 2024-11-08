@@ -78,3 +78,14 @@ ion-card-subtitle {
   color: var(--ion-color-medium);
 }
 
+ion-menu {
+  --width: 300px;
+  
+  ion-searchbar {
+    padding: 10px;
+    --background: #f4f4f4;
+    --border-radius: 8px;
+    margin: 8px;
+  }
+}
+
