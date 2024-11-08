@@ -47,18 +47,29 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    await this.cargarPedidos();
-    // Suscribirse a los cambios del carrito
-    this.carritoService.getCarrito().subscribe(items => {
-      this.carrito = items;
-    });
-    this.resultadosBusqueda = [...this.pedidos];
-    this.cargarProductos();
-    this.productosSubscription = this.carritoService.getProductos()
-      .subscribe(productos => {
-        this.productos = productos;
+    try {
+      this.userId = await this.authService.getCurrentUserId();
+      if (!this.userId) {
+        this.router.navigate(['/login']);
+        return;
+      }
+      
+      // Resto de la inicialización
+      await this.cargarPedidos();
+      this.carritoService.getCarrito().subscribe(items => {
+        this.carrito = items;
       });
-    this.carritoService.cargarProductos(); // Cargar productos al iniciar
+      this.resultadosBusqueda = [...this.pedidos];
+      this.cargarProductos();
+      this.productosSubscription = this.carritoService.getProductos()
+        .subscribe(productos => {
+          this.productos = productos;
+        });
+      this.carritoService.cargarProductos(); // Cargar productos al iniciar
+    } catch (error) {
+      console.error('Error en la inicialización:', error);
+      this.router.navigate(['/login']);
+    }
   }
 
   ngOnDestroy() {
