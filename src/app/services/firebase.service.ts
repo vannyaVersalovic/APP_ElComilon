@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 
 interface CartItem {
   id?: string;  
@@ -23,13 +24,19 @@ interface Pedido {
   providedIn: 'root'
 })
 export class FirebaseService {
-  constructor(private firestore: AngularFirestore) {}
+  constructor(
+    private firestore: AngularFirestore,
+    private afAuth: AngularFireAuth
+  ) {}
 
   // Agregar pedido al carrito
   async addToCart(pedido: Pedido, userId: string) {
     try {
+      const user = await this.afAuth.currentUser;
+      const email = user ? user.email : userId; // Usar el email como userId
+
       const cartItemRef = await this.firestore.collection('carritos').add({
-        userId: userId,
+        userId: email, // Usar el email como userId
         producto: pedido.strMeal || 'Producto sin nombre',
         precio: 9.99,
         imagen: pedido.strMealThumb || '',

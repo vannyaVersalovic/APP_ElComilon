@@ -56,4 +56,5 @@ export class LoginPage {
   onRegisterButtonPressed() {
     this.router.navigate(['/register']);
   }
+
 }

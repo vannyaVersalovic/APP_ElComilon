@@ -11,8 +11,8 @@ Actual:
 
 Ionic storage 🟢
 Autenticación firebise auth 🟢
-Crud
+Crud 🟢
 Api rest 🟢
 Buscar node express
 Firebase como consumo de API 🟢
-Usar instancia de realtime database
+Usar instancia de realtime database 🟢

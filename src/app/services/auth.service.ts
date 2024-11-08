@@ -11,9 +11,6 @@ export class AuthService {
     private navCtrl: NavController // Cambiar Router por NavController
   ) {}
 
-  isAuthenticated(): boolean {
-    return localStorage.getItem('isLoggedIn') === 'true';
-  }
 
   // Registro de usuarios
   register(email: string, password: string) {
@@ -62,5 +59,13 @@ export class AuthService {
 
   async clearLocalUser() {
     localStorage.removeItem('userId');
+  }
+
+  async isAuthenticated(): Promise<boolean> {
+    return new Promise((resolve) => {
+      this.afAuth.onAuthStateChanged((user) => {
+        resolve(!!user);
+      });
+    });
   }
 }

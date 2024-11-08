@@ -35,25 +35,43 @@ export class CarritoService {
   async agregarItem(item: any) {
     try {
       const userId = await this.authService.getCurrentUserId();
-      return this.firestore
-        .collection(`carritos/${userId}/items`)
-        .add({
-          ...item,
-          fecha: new Date(),
-          cantidad: 1,
-          userId // Agregamos el userId al documento
-        });
+      if (!userId) {
+        throw new Error('Usuario no autenticado');
+      }
+      
+      await this.firestore.collection(`carritos/${userId}/items`).add({
+        ...item,
+        userId,
+        fecha: new Date(),
+        estado: 'pendiente',
+        cantidad: 1
+      });
+
     } catch (error) {
       console.error('Error al agregar item:', error);
       throw error;
     }
   }
 
-  async eliminarItem(itemId: string) {
-    const userId = await this.authService.getCurrentUserId();
-    return this.firestore
-      .doc(`carritos/${userId}/items/${itemId}`)
-      .delete();
+  async eliminarItem(item: any) {
+    try {
+      const userId = await this.authService.getCurrentUserId();
+      // Eliminar de Firebase
+      await this.firestore
+        .doc(`carritos/${userId}/items/${item.id}`)
+        .delete();
+      
+      // Actualizar el BehaviorSubject local
+      const items = this.carritoItems.getValue();
+      const index = items.findIndex(i => i.id === item.id);
+      if (index > -1) {
+        items.splice(index, 1);
+        this.carritoItems.next(items);
+      }
+    } catch (error) {
+      console.error('Error al eliminar item:', error);
+      throw error;
+    }
   }
 
   async limpiarCarrito() {
@@ -67,6 +85,10 @@ export class CarritoService {
 
   getCarrito(): Observable<any[]> {
     return this.carritoItems.asObservable();
+  }
+
+  async obtenerCarrito(): Promise<any[]> {
+    return this.carritoItems.getValue();
   }
 
   async getTotal(): Promise<number> {

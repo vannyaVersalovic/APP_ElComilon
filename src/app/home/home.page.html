@@ -1,14 +1,15 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>Menú</ion-title>
-    <ion-buttons slot="start">
-      <ion-button (click)="navigateToLogin()">
-        Volver al Login
-      </ion-button>
-    </ion-buttons>
     <ion-buttons slot="end">
+      <ion-button (click)="verCarrito()">
+        <ion-icon name="cart"></ion-icon>
+      </ion-button>
       <ion-button (click)="openMenu()">
         <ion-icon name="menu"></ion-icon>
+      </ion-button>
+      <ion-button (click)="navigateToLogin()">
+        <ion-icon name="exit"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -46,7 +47,7 @@
   </ion-content>
 </ion-menu>
 
-<div class="ion-page" id="main-content">
+<div class="ion-page" id="main-content" [attr.inert]="mostrarCarrito ? '' : null">
   <ion-header>
     <ion-toolbar>
       <ion-buttons slot="start">
@@ -58,14 +59,23 @@
 
   <ion-content>
     <!-- Carrito de compras -->
-    <div *ngIf="mostrarCarrito" class="carrito">
+    <div *ngIf="mostrarCarrito" class="carrito" role="dialog" aria-modal="true">
       <ion-card>
         <ion-card-header>
           <ion-card-title>Carrito</ion-card-title>
         </ion-card-header>
         <ion-list>
           <ion-item *ngFor="let item of carrito">
-            <ion-label>{{ item.strMeal }}</ion-label>
+            <ion-thumbnail slot="start">
+              <img [src]="item.imagen" [alt]="item.nombre">
+            </ion-thumbnail>
+            <ion-label>
+              <h2>{{ item.nombre }}</h2>
+              <p>{{ item.precio | currency:'CLP':'symbol-narrow':'.0-0' }}</p>
+            </ion-label>
+            <ion-button slot="end" (click)="eliminarDelCarrito(item)" color="danger">
+              <ion-icon name="trash"></ion-icon>
+            </ion-button>
           </ion-item>
         </ion-list>
         <ion-button expand="full" (click)="realizarPedido()">
@@ -78,20 +88,14 @@
     </div>
 
     <div class="food-container">
-      <div class="food-item">
-        <img src="assets/imagenes/papas_fritas.png" alt="Papas Fritas" class="food-img">
-        <h3>Papas Fritas</h3>
-        <p>$2500</p>
-      </div>
-      <div class="food-item">
-        <img src="assets/imagenes/hamburguesa_happy.png" alt="Hamburguesa Happy" class="food-img">
-        <h3>Hamburguesa Happy</h3>
-        <p>$5600</p>
-      </div>
-      <div class="food-item">
-        <img src="assets/imagenes/nugget.png" alt="Nugget" class="food-img">
-        <h3>Nugget</h3>
-        <p>$3200</p>
+      <div class="food-item" *ngFor="let producto of productos">
+        <img [src]="producto.imagen" [alt]="producto.nombre" class="food-img">
+        <h3>{{producto.nombre}}</h3>
+        <p>{{producto.precio | currency:'CLP':'symbol-narrow':'.0-0'}}</p>
+        <ion-button expand="block" (click)="agregarAlCarrito(producto)">
+          <ion-icon name="cart"></ion-icon>
+          Agregar
+        </ion-button>
       </div>
     </div>
 
