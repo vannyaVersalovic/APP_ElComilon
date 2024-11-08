@@ -1,7 +1,7 @@
-
 import { Injectable } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
+import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { NavController } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
@@ -9,15 +9,22 @@ import { AuthService } from '../services/auth.service';
 export class AuthGuard implements CanActivate {
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private navCtrl: NavController
   ) {}
 
-  async canActivate(): Promise<boolean> {
-    if (await this.authService.isAuthenticated()) {
-      return true;
+  async canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Promise<boolean> {
+    const isAuthenticated = await this.authService.isAuthenticated();
+    
+    if (!isAuthenticated) {
+      // Forzar la navegación al login
+      this.navCtrl.navigateRoot('/login', { replaceUrl: true });
+      return false;
     }
-
-    this.router.navigate(['/login']);
-    return false;
+    
+    return true;
   }
 }

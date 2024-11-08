@@ -4,13 +4,14 @@ import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   {
-    path: 'login',
+    path: '',
     redirectTo: 'login',
     pathMatch: 'full'
   },
   {
     path: 'splash',
-    loadChildren: () => import('./splash/splash.module').then(m => m.SplashPageModule)
+    loadChildren: () => import('./splash/splash.module').then(m => m.SplashPageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'login',
@@ -31,7 +32,12 @@ const routes: Routes = [
     loadChildren: () => import('./carrito/carrito.module').then(m => m.CarritoPageModule),
     canActivate: [AuthGuard]
   },
-
+  // Ruta comodín - redirige al login si la ruta no existe
+  {
+    path: '**',
+    redirectTo: 'login',
+    pathMatch: 'full'
+  }
 ];
 
 @NgModule({
