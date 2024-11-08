@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { FirebaseService } from '../services/firebase.service';
 import { ApiService } from '../services/api.service';
 import { LoadingController, ToastController, MenuController } from '@ionic/angular';
+import { CarritoService } from '../services/carrito.service';
+import { ProductosService } from '../services/productos.service';
+import { Subscription } from 'rxjs';
 
 interface Pedido {
   strMeal: string;
@@ -16,7 +19,7 @@ interface Pedido {
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
 })
-export class HomePage implements OnInit {
+export class HomePage implements OnInit, OnDestroy {
   pedidos: Pedido[] = [];
   busqueda: string = '';
   carrito: any[] = [];
@@ -24,6 +27,8 @@ export class HomePage implements OnInit {
   mostrarCarrito: boolean = false;
   navbarOpen = false;
   resultadosBusqueda: Pedido[] = [];
+  private productosSubscription: Subscription;
+  productos: any[] = [];
 
   constructor(
     private router: Router,
@@ -31,13 +36,30 @@ export class HomePage implements OnInit {
     private apiService: ApiService,
     private loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
-    private menu: MenuController // Agregar MenuController
-  ) {}
+    private menu: MenuController, // Agregar MenuController
+    private carritoService: CarritoService,
+    private productosService: ProductosService,
+    private toastController: ToastController
+  ) {
+    this.productosSubscription = new Subscription();
+  }
 
   async ngOnInit() {
     await this.cargarPedidos();
     await this.cargarCarrito();
     this.resultadosBusqueda = [...this.pedidos];
+    this.cargarProductos();
+    this.productosSubscription = this.carritoService.getProductos()
+      .subscribe(productos => {
+        this.productos = productos;
+      });
+    this.carritoService.cargarProductos(); // Cargar productos al iniciar
+  }
+
+  ngOnDestroy() {
+    if (this.productosSubscription) {
+      this.productosSubscription.unsubscribe();
+    }
   }
 
   async cargarCarrito() {
@@ -201,5 +223,25 @@ export class HomePage implements OnInit {
 
   openMenu() {
     this.menu.toggle();
+  }
+
+  async cargarProductos() {
+    this.productosService.obtenerProductos().subscribe(productos => {
+      this.productos = productos;
+    });
+  }
+
+  async agregarAlCarrito(producto: any) {
+    try {
+      await this.carritoService.agregarItem(producto);
+      const toast = await this.toastController.create({
+        message: 'Producto agregado al carrito',
+        duration: 2000,
+        position: 'bottom'
+      });
+      toast.present();
+    } catch (error) {
+      console.error('Error al agregar al carrito:', error);
+    }
   }
 }

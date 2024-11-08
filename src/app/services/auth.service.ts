@@ -11,6 +11,10 @@ export class AuthService {
     private navCtrl: NavController // Cambiar Router por NavController
   ) {}
 
+  isAuthenticated(): boolean {
+    return localStorage.getItem('isLoggedIn') === 'true';
+  }
+
   // Registro de usuarios
   register(email: string, password: string) {
     return this.afAuth.createUserWithEmailAndPassword(email, password);
@@ -18,13 +22,45 @@ export class AuthService {
 
   // Inicio de sesión
   login(email: string, password: string) {
-    return this.afAuth.signInWithEmailAndPassword(email, password);
+    this.afAuth.signInWithEmailAndPassword(email, password).then(userData => {
+      localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('userData', JSON.stringify(userData));
+    });
   }
 
   // Cerrar sesión
   logout() {
-    return this.afAuth.signOut().then(() => {
+    this.afAuth.signOut().then(() => {
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('userData');
       this.navCtrl.navigateRoot('/login');
     });
+  }
+
+  async getCurrentUserId(): Promise<string> {
+    // Primero intentamos obtener el ID de Firebase
+    const firebaseUser = await this.afAuth.currentUser;
+    if (firebaseUser) {
+      return firebaseUser.uid;
+    }
+    
+    // Si no hay usuario en Firebase, buscamos en localStorage
+    const localUser = localStorage.getItem('userId');
+    if (localUser) {
+      return localUser;
+    }
+    
+    // Si no hay usuario en ningún lado, creamos uno local
+    const newLocalId = 'local_' + Date.now();
+    localStorage.setItem('userId', newLocalId);
+    return newLocalId;
+  }
+
+  async saveUserToLocal(userId: string) {
+    localStorage.setItem('userId', userId);
+  }
+
+  async clearLocalUser() {
+    localStorage.removeItem('userId');
   }
 }
